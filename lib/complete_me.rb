@@ -51,7 +51,7 @@ class CompleteMe
       else
         @count += 1
         node.word = true
-      endc
+      end
 
   end
 
@@ -78,6 +78,7 @@ class CompleteMe
     nodes_len = nodes.length
     if nodes[nodes_len - 1].word
       nodes[nodes_len - 1].value
+      
     else
       find_words(nodes[nodes_len - 1])
     end
@@ -111,12 +112,12 @@ class CompleteMe
 end
 
 dictionary = File.open("/usr/share/dict/words", "r").read
-#test_trie = CompleteMe.new
+test_trie = CompleteMe.new
 
 
 #test_trie.insert_new_line_words(dictionary)
-#test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
+test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
 
-#what_value = test_trie.find_specific_words(test_trie.root,"he")
+what_value = test_trie.find_specific_words(test_trie.root,"he")
 binding.pry
 ''
