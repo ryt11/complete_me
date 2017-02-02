@@ -17,11 +17,13 @@ end
 
 
 class CompleteMe
-
-  attr_accessor :root, :count
+  attr_reader :current_substring
+  attr_accessor :root, :count, :weight_hash
   def initialize
     @root = Node.new('')
     @count = 0
+    @weight_hash = Hash.new
+    @current_substring = current_substring
 
   end
 
@@ -81,16 +83,43 @@ class CompleteMe
   end
 
   def suggest(substring, node = @root)
+    @current_substring = substring
+    @weight_hash[substring] = nil
     found_words = []
     if node.value == substring
       found_words =  find_words(node)
-
     else
       node.children.each do |child_node|
         found_words += self.suggest(substring, child_node)
       end
     end
     found_words
+  end
+
+  def selector (substring, selected_word, suggestions)
+    @weight_hash[substring] = selected_word
+    return nil
+
+
+
+  end
+
+  def get_user_input
+    print "Please enter a substring for suggestions. >   "
+    user_substring_input = gets.chomp
+    user_suggestions = suggest(user_substring_input)
+    initial_output = "Please choose one of the following words: "
+    user_suggestions.each_with_index do |word, index|
+      if index != (user_suggestions.length - 1)
+        initial_output += "#{word}, "
+      else
+        initial_output += "#{word}."
+      end
+    end
+    puts initial_output
+    selection = gets.chomp
+    selector(@current_substring, selection, user_suggestions)
+
   end
 
 end
@@ -101,9 +130,9 @@ test_trie = CompleteMe.new
 
 #test_trie.insert_new_line_words(dictionary)
 test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
+test_trie.get_user_input
 
 
-suggestions = test_trie.suggest("he")
+#make_selector(@current_substring, selection, user_suggestions)
 binding.pry
-
 ''
