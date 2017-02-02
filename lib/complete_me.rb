@@ -69,7 +69,9 @@ class CompleteMe
   end
 
   def find_words (node, words = [])
-    if node.word
+    if node.word && node.weight > 0
+      words.unshift(node.value)
+    elsif node.word
       words << node.value
     end
 
@@ -116,9 +118,12 @@ dictionary = File.open("/usr/share/dict/words", "r").read
 test_trie = CompleteMe.new
 
 
-#test_trie.insert_new_line_words(dictionary)
-test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
+test_trie.insert_new_line_words(dictionary)
+#test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
+test_trie.suggest("xyl")
 
-what_value = test_trie.selecter(test_trie.root,"he")
+test_trie.selecter(test_trie.root, "xylophone")
 binding.pry
+test_trie.suggest("xyl")
 ''
+#what_value = test_trie.selecter(test_trie.root,"he")
