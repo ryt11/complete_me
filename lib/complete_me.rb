@@ -55,7 +55,7 @@ class CompleteMe
 
   end
 
-  def  insert_new_line_words (list)
+  def populate (list)
     word_list = list.split("\n")
     word_list.each do |word|
       self.insert(word)
@@ -94,6 +94,8 @@ class CompleteMe
     end
     found_words
   end
+
+
   def selecter (node, string, i = 0, nodes = [])
     node.children.each do |child_node|
       if child_node.value == string[0..i]
@@ -118,7 +120,7 @@ dictionary = File.open("/usr/share/dict/words", "r").read
 #test_trie = CompleteMe.new
 
 
-#test_trie.insert_new_line_words(dictionary)
+#test_trie.populate(dictionary)
 #test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
 #test_trie.suggest("xyl")
 

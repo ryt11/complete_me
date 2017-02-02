@@ -18,7 +18,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_inserts_multiple_words
-    cm.insert_new_line_words("pizza\ndog\ncat")
+    cm.populate("pizza\ndog\ncat")
     assert_equal 3, cm.count
   end
 
@@ -37,31 +37,31 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_inserts_medium_dataset
-    cm.insert_new_line_words(medium_word_list)
+    cm.populate(medium_word_list)
     assert_equal medium_word_list.split("\n").count, cm.count
   end
 
   def test_suggests_off_of_medium_dataset
-    cm.insert_new_line_words(medium_word_list)
+    cm.populate(medium_word_list)
     assert_equal ["williwaw", "wizardly"], cm.suggest("wi").sort
   end
 
   def test_selects_off_of_medium_dataset
-    cm.insert_new_line_words(medium_word_list)
+    cm.populate(medium_word_list)
     cm.suggest("wi")
     cm.selecter(cm.root, "wizardly")
     assert_equal ["wizardly", "williwaw"], cm.suggest("wi")
   end
 
   def test_works_with_large_dataset
-    cm.insert_new_line_words(large_word_list)
+    cm.populate(large_word_list)
     assert_equal ["doggerel", "doggereler", "doggerelism", "doggerelist", "doggerelize", "doggerelizer"], cm.suggest("doggerel").sort
     cm.selecter(cm.root, "doggerelist")
     assert_equal "doggerelist", cm.suggest("doggerel").first
   end
 
   def insert_words(words)
-    cm.insert_new_line_words(words.join("\n"))
+    cm.populate(words.join("\n"))
   end
 
   def medium_word_list
