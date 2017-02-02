@@ -100,12 +100,12 @@ class CompleteMe
         self.selecter(child_node, string, i, nodes)
       end
     end
-    nodes_len = nodes.length
-    if nodes[nodes_len - 1].word
-      nodes[nodes_len -1].weight += 1
-      nodes[nodes_len - 1].value
+    nodes_last_index = nodes.length - 1
+    if nodes[nodes_last_index].word
+      nodes[nodes_last_index].weight += 1
+      nodes[nodes_last_index].value
     else
-      find_words(nodes[nodes_len - 1])
+      find_words(nodes[nodes_last_index])
     end
   end
 
