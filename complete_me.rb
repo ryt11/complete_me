@@ -1,4 +1,3 @@
-
 require 'pry'
 class Node
 
@@ -17,13 +16,11 @@ end
 
 
 class CompleteMe
-  attr_reader :current_substring
-  attr_accessor :root, :count, :weight_hash
+
+  attr_accessor :root, :count
   def initialize
     @root = Node.new('')
     @count = 0
-    @weight_hash = Hash.new
-    @current_substring = current_substring
 
   end
 
@@ -54,7 +51,7 @@ class CompleteMe
       else
         @count += 1
         node.word = true
-      end
+      endc
 
   end
 
@@ -70,6 +67,22 @@ class CompleteMe
 
     end
   end
+  def find_specific_words (node, string, i = 0, nodes = [])
+    node.children.each do |child_node|
+      if child_node.value == string[0..i]
+        i += 1
+        nodes << child_node
+        self.find_specific_words(child_node, string, i, nodes)
+      end
+    end
+    nodes_len = nodes.length
+    if nodes[nodes_len - 1].word
+      nodes[nodes_len - 1].value
+    else
+      find_words(nodes[nodes_len - 1])
+    end
+  end
+
   def find_words (node, words = [])
     if node.word
       words << node.value
@@ -83,11 +96,10 @@ class CompleteMe
   end
 
   def suggest(substring, node = @root)
-    @current_substring = substring
-    @weight_hash[substring] = nil
     found_words = []
     if node.value == substring
       found_words =  find_words(node)
+
     else
       node.children.each do |child_node|
         found_words += self.suggest(substring, child_node)
@@ -96,43 +108,15 @@ class CompleteMe
     found_words
   end
 
-  def selector (substring, selected_word, suggestions)
-    @weight_hash[substring] = selected_word
-    return nil
-
-
-
-  end
-
-  def get_user_input
-    print "Please enter a substring for suggestions. >   "
-    user_substring_input = gets.chomp
-    user_suggestions = suggest(user_substring_input)
-    initial_output = "Please choose one of the following words: "
-    user_suggestions.each_with_index do |word, index|
-      if index != (user_suggestions.length - 1)
-        initial_output += "#{word}, "
-      else
-        initial_output += "#{word}."
-      end
-    end
-    puts initial_output
-    selection = gets.chomp
-    selector(@current_substring, selection, user_suggestions)
-
-  end
-
 end
 
 dictionary = File.open("/usr/share/dict/words", "r").read
-test_trie = CompleteMe.new
+#test_trie = CompleteMe.new
 
 
 #test_trie.insert_new_line_words(dictionary)
-test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
-test_trie.get_user_input
+#test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
 
-
-#make_selector(@current_substring, selection, user_suggestions)
+#what_value = test_trie.find_specific_words(test_trie.root,"he")
 binding.pry
 ''
