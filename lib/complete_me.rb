@@ -1,7 +1,7 @@
 require 'pry'
 class Node
 
-  attr_accessor :parent, :word, :children
+  attr_accessor :parent, :word, :children, :weight
   attr_reader :value
 
   def initialize (value)
@@ -67,22 +67,6 @@ class CompleteMe
 
     end
   end
-  def find_specific_words (node, string, i = 0, nodes = [])
-    node.children.each do |child_node|
-      if child_node.value == string[0..i]
-        i += 1
-        nodes << child_node
-        self.find_specific_words(child_node, string, i, nodes)
-      end
-    end
-    nodes_len = nodes.length
-    if nodes[nodes_len - 1].word
-      nodes[nodes_len - 1].value
-      
-    else
-      find_words(nodes[nodes_len - 1])
-    end
-  end
 
   def find_words (node, words = [])
     if node.word
@@ -108,6 +92,23 @@ class CompleteMe
     end
     found_words
   end
+  def selecter (node, string, i = 0, nodes = [])
+    node.children.each do |child_node|
+      if child_node.value == string[0..i]
+        i += 1
+        nodes << child_node
+        self.selecter(child_node, string, i, nodes)
+      end
+    end
+    nodes_len = nodes.length
+    if nodes[nodes_len - 1].word
+      nodes[nodes_len -1].weight += 1
+      nodes[nodes_len - 1].value
+    else
+      find_words(nodes[nodes_len - 1])
+    end
+  end
+
 
 end
 
@@ -118,6 +119,6 @@ test_trie = CompleteMe.new
 #test_trie.insert_new_line_words(dictionary)
 test_trie.insert_words(["hello", "sup", "hemp", "henry", "cup", "glass"])
 
-what_value = test_trie.find_specific_words(test_trie.root,"he")
+what_value = test_trie.selecter(test_trie.root,"he")
 binding.pry
 ''
